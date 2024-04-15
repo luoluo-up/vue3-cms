@@ -23,6 +23,12 @@ export default {
             user: 'User management',
             role: 'Role management',
             menu: 'Menu management'
+        },
+        readME: {
+            title: 'ReadME document',
+            product: 'Product  document',
+            acl: 'Rights  document',
+            readme: 'Project explain'
         }
     },
     header: {

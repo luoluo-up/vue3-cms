@@ -25,11 +25,14 @@ export function reqGetBrandData(pageData: any) {
     })
 }
 //  添加或编辑品牌数据请求
-export function reqUploadImg(data: any) {
+export function reqUploadBrandName(brandId: string, brandName: string,) {
     return service({
-        url: '/uploadImg',
+        url: '/uploadBrandName',
         method: 'post',
-        data
+        data: {
+            brandId,
+            brandName
+        }
     })
 }
 //  添加或编辑品牌数据请求
@@ -118,3 +121,5 @@ export function reqgetMenuRoutes(token: string) {
         }
     })
 }
+
+

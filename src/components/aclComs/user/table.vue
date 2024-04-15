@@ -206,7 +206,7 @@ async function handleDelete(index: number, row: User, parent: any) {
 }
 // 分配权限按钮
 async function limitsBtn(row: any) {
-    console.log(row);
+    // console.log(row);
     userToken.value = row.token
     if (!asyncRoutes.value.length) {
         const result = await reqGetAsyncRoute()

@@ -1,17 +1,42 @@
 <template>
-    <div>
-        SKU管理
-        <input type="text" v-for="(item, index) in 10" :key="index" @change="change(index)" ref="ipt"
-            @input="change(index)">
-    </div>
-</template>
+    <el-upload ref="upload" class="upload-demo" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        :auto-upload="false" :limit="1" :on-exceed="handleExceed" @change="change">
+        <template #trigger>
+            <el-button type="primary">select file</el-button>
+        </template>
 
-<script setup lang="ts">
+        <el-button class="ml-3" type="success" @click="submitUpload">
+            upload to server
+        </el-button>
+
+        <template #tip>
+            <div class="el-upload__tip">
+                jpg/png files with a size less than 500kb
+            </div>
+        </template>
+    </el-upload>
+</template>
+<script lang="ts" setup>
 import { ref } from 'vue'
-let ipt = ref()
-function change(index: number) {
-    console.log(ipt.value[index].value);
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { genFileId } from 'element-plus'
+import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+
+const upload = ref<UploadInstance>()
+
+const submitUpload = () => {
+    upload.value!.submit()
+}
+
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+    upload.value!.clearFiles()
+    const file = files[0] as UploadRawFile
+    file.uid = genFileId()
+    upload.value!.handleStart(file)
+}
+
+function change() {
+    console.log(111);
 }
 </script>
-
-<style scoped></style>

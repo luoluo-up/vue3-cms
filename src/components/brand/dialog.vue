@@ -7,23 +7,27 @@
                     <el-input v-model="ruleForm.brandName" autocomplete="off" type="text" />
                 </el-form-item>
                 <el-form-item label="品牌Logo" prop="brandLogo">
-                    <!-- 上传图片 -->
-                    <el-upload class="avatar-uploader" action="#" :http-request="sendRequest" :show-file-list="false">
-                        <img v-if="ruleForm.brandLogo" :src="ruleForm.brandLogo" class="avatar" />
-                        <el-icon v-else class="avatar-uploader-icon">
-                            <Plus />
-                        </el-icon>
+                    <el-upload ref="uploadRef" class="upload-demo" action="http://127.0.0.1:8080/myApi/uploadImg"
+                        :auto-upload="false" :limit="1" :on-exceed="handleExceed" :show-file-list="false"
+                        @change="change" :on-success="success" :on-error="error" :data="ruleForm" :headers="header">
+                        <template #trigger>
+                            <img v-if="ruleForm.brandLogo" :src="ruleForm.brandLogo" />
+                            <el-icon v-else class="avatar-uploader-icon">
+                                <Plus />
+                            </el-icon>
+                        </template>
+                        <div class="btns">
+                            <el-button class="ml-3" type="success" @click="resetForm(ruleFormRef)">
+                                取消
+                            </el-button>
+                            <el-button class="ml-3" type="success" @click="submitUpload(ruleFormRef)">
+                                上传
+                            </el-button>
+                        </div>
                     </el-upload>
                 </el-form-item>
             </el-form>
-            <template #footer>
-                <div class="dialog-footer">
-                    <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-                    <el-button type="primary" @click="submitForm(ruleFormRef)" :loading="loadingStore.loading">
-                        确定
-                    </el-button>
-                </div>
-            </template>
+
         </el-dialog>
     </div>
 </template>
@@ -33,10 +37,12 @@
 import { ref, reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { reqUploadImg } from '@/request/api';
 import { ElMessage } from 'element-plus';
+import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { genFileId } from 'element-plus'
+import { reqUploadBrandName } from '@/request/api'
 import emitter from '@/utils/emitter';
-import useLoadingStore from '@/stores/modules/loading';
+
 
 let addDialog = ref(false) // 品牌弹窗是否出现
 const ruleFormRef = ref<FormInstance>() // form表单类型
@@ -44,6 +50,8 @@ const ruleFormRef = ref<FormInstance>() // form表单类型
 let ruleForm = reactive({
     brandName: '',
     brandLogo: '',
+    brandId: '',
+    sortID: ''
 })
 // 品牌弹窗表单数据规则
 const rules = reactive<FormRules<typeof ruleForm>>({
@@ -54,9 +62,11 @@ const rules = reactive<FormRules<typeof ruleForm>>({
         { required: true, message: '品牌Logo不能为空', trigger: 'blur', },
     ]
 })
-const props = defineProps(['title'])
-const loadingStore = useLoadingStore()
-
+const props = defineProps(['title'])    // 弹窗标题
+const uploadRef = ref<UploadInstance>()  // 上传组件
+const header = {
+    token: sessionStorage.getItem('token')
+}
 
 
 // 改变弹窗状态事件,由父组件调用
@@ -64,109 +74,133 @@ function changeDialog(flag: boolean, data: any) {
     addDialog.value = flag
     if (data) {
         ruleForm = Object.assign(ruleForm, data)
+    } else {
+        ruleForm.brandLogo = ''
+        ruleForm.brandName = ''
+        ruleForm.brandId = ''
+        ruleForm.sortID = ''
     }
 }
 defineExpose({
     changeDialog
 })
+
+
+
 // 品牌数据弹窗关闭事件
 const handleClose = () => {
     addDialog.value = false
     ruleFormRef.value!.clearValidate()
     ruleForm.brandLogo = ''
     ruleForm.brandName = ''
+    ruleForm.brandId = ''
+    ruleForm.sortID = ''
 }
-// 品牌数据弹窗取消事件
+// 取消按钮事件
 function resetForm(formEl: FormInstance | undefined) {
     if (!formEl) return
-    formEl.resetFields()
     addDialog.value = false
+    formEl.resetFields()
+    ruleForm.brandLogo = ''
+    ruleForm.brandName = ''
+    ruleForm.brandId = ''
+    ruleForm.sortID = ''
 }
-// 品牌数据弹窗确认事件
-function submitForm(formEl: FormInstance | undefined) {
+// 图片选择改变事件
+const change: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+    ruleForm.brandLogo = window.URL.createObjectURL(uploadFile.raw as File)
+    // ruleForm.brandLogo = uploadFile.name
+}
+// 上传按钮事件
+const submitUpload = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate(async (valid) => {
         if (valid) {
-            console.log('发送请求,保存图片', ruleForm)
-            const result = await reqUploadImg(ruleForm)
-            handleClose()
-            if (!result) return
-            // 刷新数据
-            emitter.emit('getTableData')
-            ElMessage.closeAll()
-            ElMessage({
-                message: props.title == '添加品牌' ? '添加成功' : '修改成功',
-                type: 'success',
-            })
+            addDialog.value = false
+            if (props.title == '添加品牌') {
+                uploadRef.value!.submit()
+            } else {
+                const result = await reqUploadBrandName(ruleForm.brandId, ruleForm.brandName)
+                if (!result) return
+                if (result) {
+                    emitter.emit('getTableData')
+                }
+                uploadRef.value!.submit()
+            }
         } else {
             console.log('error submit!')
             return false
         }
     })
 }
-
-// el-upload 上传请求,自定义请求方法
-function sendRequest(data: any) {
-    // blob:http://localhost:5173/efa6598d-d562-4275-b59f-1bf3f3c07c93 这种格式地址 通过file 或者 base64都可以转换
-    ruleForm.brandLogo = window.URL.createObjectURL(data.file)
-    // base64 转换方法
-    // const reader = new FileReader();
-    // // 读取文件内容
-    // reader.readAsDataURL(data.file);
-    // // 当文件读取完成时的回调函数
-    // reader.onload = () => {
-    //     // 将文件内容转换为base64格式  reader.result 是获取到的file name
-    //     let base64 = reader.result as string
-    //     // 转为blob
-    //     let arr = base64.split(','), mime = arr[0].match(/:(.*?);/)![1],
-    //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    //     while (n--) {
-    //         u8arr[n] = bstr.charCodeAt(n);
-    //     }
-    //     let bdata = new Blob([u8arr], { type: mime })
-    //     // console.log(bdata);
-    //     // 最终获取到 blob:http://localhost:5173/efa6598d-d562-4275-b59f-1bf3f3c07c93 这种格式地址
-    //     ruleForm.brandLogo = window.URL.createObjectURL(bdata)
-    //     // console.log( ruleForm.brandLogo);
-    // };
+// 一次只能上传一张图片，覆盖掉上次的图片
+const handleExceed: UploadProps['onExceed'] = (files) => {
+    uploadRef.value!.clearFiles()
+    const file = files[0] as UploadRawFile
+    file.uid = genFileId()
+    uploadRef.value!.handleStart(file)
+}
+// 上传成功事件
+function success(res: any) {
+    ElMessage.closeAll()
+    if (res.status == 1) {
+        ElMessage({
+            showClose: true,
+            message: '上传成功',
+            type: 'success',
+            grouping: true,
+        })
+        emitter.emit('getTableData')
+    } else {
+        ElMessage({
+            showClose: true,
+            message: '上传失败',
+            type: 'error',
+            grouping: true,
+        })
+    }
+    handleClose()
 }
 
+// 上传失败事件
+function error() {
+    ElMessage.closeAll()
+    ElMessage({
+        showClose: true,
+        message: '上传失败',
+        type: 'error',
+        grouping: true,
+    })
+    handleClose()
+}
 </script>
 
 
-<style scoped lang="scss">
-.avatar-uploader .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-
-
-}
-
-// img {
-//     width: 100%;
-// }</style>
 
 <!-- 上传组件样式 -->
 <style>
-.avatar-uploader .el-upload {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-}
-
-.avatar-uploader .el-upload:hover {
-    border-color: var(--el-color-primary);
+.btns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0
 }
 
 .el-icon.avatar-uploader-icon {
+    width: 200px !important;
+    height: 200px !important;
     font-size: 28px;
     color: #8c939d;
     width: 178px;
     height: 178px;
     text-align: center;
+    border: 1px dashed #6fb6ff;
+    border-radius: 5px;
+    box-sizing: border-box
+}
+
+.el-upload img {
+    width: 200px;
+    height: 200px;
 }
 </style>

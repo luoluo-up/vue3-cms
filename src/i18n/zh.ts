@@ -24,7 +24,12 @@ export default {
             role: '角色管理',
             menu: '菜单管理'
         },
-
+        readME: {
+            title: 'ReadME文档',
+            product: '商品管理文档',
+            acl: '权限管理文档',
+            readme: '项目结构解读'
+        }
     },
     header: {
         top: {

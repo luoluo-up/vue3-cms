@@ -7,7 +7,7 @@ import emitter from '@/utils/emitter'
 
 const loadingStore = useLoadingStore(pinia)
 const service = axios.create({
-    baseURL: 'http://127.0.0.1:8081/myApi',
+    baseURL: 'http://127.0.0.1:8080/myApi',
     timeout: 5000,
     headers: {
         "Content-Type": 'application/json;charset=utf-8'
@@ -25,7 +25,7 @@ service.interceptors.request.use((config) => {
 
 // 响应拦截器
 service.interceptors.response.use((res) => {
-    console.log('响应拦截器得到的数据', res.data);
+    // console.log('响应拦截器得到的数据', res.data);
     loadingStore.loading = false
     // ElMessage.closeAll()
     if (res.data.code == 200 && res.data.status == -1) {

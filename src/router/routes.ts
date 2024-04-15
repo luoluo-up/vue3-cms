@@ -62,6 +62,54 @@ export const constRoutes = [
             hidden: false
         },
     },
+    // ReadME
+    {
+        path: '/readME',
+        redirect: '/readME/product',
+        name: 'ReadME',
+        label: 'ReadME文档',
+        component: () => import('@/layout/Layout.vue'),
+        meta: {
+            title: 'menu.readME.title',
+            icon: 'Document',
+            hidden: false
+        },
+        children: [
+            {
+                path: '/readME/product',
+                name: 'readMEProduct',
+                label: '品牌管理文档',
+                component: () => import('@/views/readME/product.vue'),
+                meta: {
+                    title: 'menu.readME.product',
+                    icon: 'Document',
+                    hidden: false
+                },
+            },
+            {
+                path: '/readME/acl',
+                name: 'readMEAcl',
+                label: '品牌管理文档',
+                component: () => import('@/views/readME/acl.vue'),
+                meta: {
+                    title: 'menu.readME.acl',
+                    icon: 'Document',
+                    hidden: false
+                },
+            },
+            {
+                path: '/readME/readme',
+                name: 'readMEReadme',
+                label: '品牌管理文档',
+                component: () => import('@/views/readME/readme.vue'),
+                meta: {
+                    title: 'menu.readME.readme',
+                    icon: 'Document',
+                    hidden: false
+                },
+            },
+        ]
+    },
 ]
 
 // 异步路由

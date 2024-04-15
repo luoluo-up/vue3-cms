@@ -83,8 +83,8 @@
                 </div>
                 <div class="setting_box">
                     <span>{{ $t('header.setting.setLanguage') }}</span>
-                    <el-switch v-model="language" inline-prompt class="mb-2" active-text="中" inactive-text="英"
-                        size="large" @change="changeLanguage" />
+                    <el-switch v-model="layoutStore.language" inline-prompt class="mb-2" active-text="中"
+                        inactive-text="英" size="large" @change="changeLanguage" />
                 </div>
             </el-drawer>
         </div>
@@ -111,7 +111,7 @@ const userStore = useUserStore() // 用户数据仓库
 const $router = useRouter()
 const $useRoute = useRoute() // 路由数据
 let settingColor = ref('') // 颜色拾取器数据
-let language = ref(true) // 中英文数据
+// let language = ref(true) // 中英文数据
 const i18n = useI18n()  // i18n数据
 // 设置按钮
 let settingOpen = ref(false)
@@ -162,7 +162,7 @@ function changePiker() {
 }
 // 语言切换
 function changeLanguage() {
-    if (language.value) {
+    if (layoutStore.language) {
         sessionStorage.setItem('lang', 'zh')
         i18n.locale.value = 'zh'
     } else {

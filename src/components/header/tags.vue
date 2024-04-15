@@ -87,6 +87,7 @@ function changeTag(tag: any) {
     .el-tag {
         margin-right: 10px;
         margin-bottom: 10px;
+        user-select: none;
 
         &:hover {
             cursor: pointer;

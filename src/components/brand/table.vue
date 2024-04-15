@@ -9,6 +9,7 @@
                 <el-table-column prop="brandName" label="品牌名称" />
                 <el-table-column label="品牌LOGO" width="350">
                     <template #default="scope">
+                        <!-- {{ scope.row.brandLogo }} -->
                         <el-image :src="scope.row.brandLogo">
                             <template #error>
                                 <div class="image-slot">
@@ -41,9 +42,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { reqGetBrandData } from '@/request/api';
+import { reqGetBrandData, reqDelBrandData } from '@/request/api';
 import emitter from '@/utils/emitter';
-import { reqDelBrandData } from '@/request/api';
 import { ElMessage } from 'element-plus';
 import useLoadingStore from '@/stores/modules/loading';
 
@@ -58,17 +58,26 @@ const emits = defineEmits(['click-edit'])
 
 // 表格编辑事件
 function handleEdit(index: number, row: any) {
+    console.log('编辑品牌', row);
+
     emits('click-edit', '编辑品牌', row)
 }
 // 表格删除事件
 async function handleDelete(index: number, row: any) {
-    const result = await reqDelBrandData(row.brandId)
+    const result = await reqDelBrandData(row.brandId) as any
     if (!result) return
-    getTableData()
-    // ElMessage({
-    //     message: '删除成功',
-    //     type: 'success'
-    // })
+    await getTableData()
+    // if (result.status == 1) {
+    //     ElMessage({
+    //         type: 'success',
+    //         message: result.message
+    //     })
+    // } else {
+    //     ElMessage({
+    //         type: 'error',
+    //         message: result.message
+    //     })
+    // }
 }
 // 获取表格数据事件
 async function getTableData() {
@@ -80,6 +89,7 @@ async function getTableData() {
     if (!result) return
     tableData.value = result.data.tableData
     total.value = result.data.total
+    // ElMessage.closeAll()
 }
 onMounted(() => {
     getTableData()
