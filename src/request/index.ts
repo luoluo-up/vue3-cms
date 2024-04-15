@@ -7,7 +7,7 @@ import emitter from '@/utils/emitter'
 
 const loadingStore = useLoadingStore(pinia)
 const service = axios.create({
-    baseURL: 'http://127.0.0.1:8080/myApi',
+    baseURL: 'http://127.0.0.1/myApi',
     timeout: 5000,
     headers: {
         "Content-Type": 'application/json;charset=utf-8'
