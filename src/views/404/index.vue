@@ -2,7 +2,8 @@
     <div class="error_box">
         <img src="@/assets/404.jpg" alt="">
         <div class="return_box" @click="back">
-            返回首页
+            <p>找不到地址啦!</p>
+            <p>先返回首页吧!</p>
         </div>
     </div>
 </template>
@@ -38,6 +39,7 @@ function back() {
         padding: 10px 30px;
         border-radius: 10px;
         color: #fff;
+        line-height: 40px;
 
         &:hover {
             cursor: pointer;
