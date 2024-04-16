@@ -4,6 +4,7 @@ import { constRoutes, asyncRoutes, anyRoutes } from "@/router/routes";
 import router from "@/router";
 import { cloneDeep } from "lodash";
 import type { TypeuserInfo } from "@/types/types";
+import { ElMessage } from "element-plus";
 
 
 
@@ -23,6 +24,7 @@ let useUserStore = defineStore('User', {
         async update() {
             // 更新用户信息
             const result = await reqGetUserinfo()
+            ElMessage.closeAll()
             if (!result) return
             // 如果获取不到用户信息 就需要重新登录
             if (result.status == -1) {
