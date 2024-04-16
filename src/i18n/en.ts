@@ -29,6 +29,9 @@ export default {
             product: 'Product  document',
             acl: 'Rights  document',
             readme: 'Project explain'
+        },
+        message: {
+            title: 'Message board'
         }
     },
     header: {

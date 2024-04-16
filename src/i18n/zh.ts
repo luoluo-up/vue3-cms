@@ -29,6 +29,9 @@ export default {
             product: '商品管理文档',
             acl: '权限管理文档',
             readme: '项目结构解读'
+        },
+        message: {
+            title: '留言板'
         }
     },
     header: {

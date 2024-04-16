@@ -122,4 +122,22 @@ export function reqgetMenuRoutes(token: string) {
     })
 }
 
+//  获取浏览板数据
+export function reqGetMessage() {
+    return service({
+        url: '/getMessage',
+        method: 'get',
+    })
+}
+
+//  获取浏览板数据
+export function reqaddMessage(data: any) {
+    return service({
+        url: '/addMessage',
+        method: 'post',
+        data
+    })
+}
+
+
 

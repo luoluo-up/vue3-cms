@@ -110,6 +110,31 @@ export const constRoutes = [
             },
         ]
     },
+    // 留言板
+    {
+        path: '/message',
+        name: 'Message',
+        label: '留言板',
+        component: () => import('@/layout/Layout.vue'),
+        meta: {
+            title: '',
+            icon: '',
+            hidden: false
+        },
+        children: [
+            {
+                path: '/message/board',
+                name: 'messageBoard',
+                label: '品牌管理文档',
+                component: () => import('@/views/message/index.vue'),
+                meta: {
+                    title: 'menu.message.title',
+                    icon: 'Document',
+                    hidden: false
+                },
+            },
+        ]
+    },
 ]
 
 // 异步路由

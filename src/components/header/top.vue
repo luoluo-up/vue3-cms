@@ -126,11 +126,10 @@ function expendBtn() {
 function clickBread(data: any) {
     emitter.emit('pushBread', data)
 }
-
-
-
+// 刷新
 function clickRefresh() {
     layoutStore.isRefresh = !layoutStore.isRefresh
+    // $router.go(0)
 }
 // 全屏方法
 function fullScreen() {
