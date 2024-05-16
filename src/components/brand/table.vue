@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <el-card>
             <slot> </slot>
             <el-table :data="tableData" style="width: 100%" border v-loading="loadingStore.loading"
