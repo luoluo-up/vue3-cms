@@ -43,7 +43,7 @@ v<template>
 
 <style scoped lang="scss">
 .home {
-    background: url('../../assets/1.jpg') repeat;
+    background: url('../../assets/3.jpg') repeat;
     height: 100%;
 }
 
