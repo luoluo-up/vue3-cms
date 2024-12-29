@@ -7,7 +7,7 @@
                     <el-input v-model="ruleForm.brandName" autocomplete="off" type="text" />
                 </el-form-item>
                 <el-form-item label="品牌Logo" prop="brandLogo">
-                    <el-upload ref="uploadRef" class="upload-demo" action="http://127.0.0.1:8080/myApi/uploadImg"
+                    <el-upload ref="uploadRef" class="upload-demo" action="http://127.0.0.1:8080/uploadImg"
                         :auto-upload="false" :limit="1" :on-exceed="handleExceed" :show-file-list="false"
                         @change="change" :on-success="success" :on-error="error" :data="ruleForm" :headers="header">
                         <template #trigger>
