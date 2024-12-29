@@ -1,6 +1,6 @@
 v<template>
-    <div>
-        <div class="project_introduce">
+    <div class="home">
+        <!-- <div class="project_introduce">
             <p>
                 Vue是前端三大主流框架之一，也是目前最火的一个前端框架。Vue作为一套构建用户界面的框架，关注视图层，它不仅易于上手，还便于与第三方库或既有项目整合，提高开发效率。
                 在Vue中也有这样一个核心的概念，就是让用户不再操作DOM元素，解放了用户的双手，让程序员可以更多的时间去关注业务逻辑。
@@ -33,7 +33,7 @@ v<template>
                     https://gitee.com/xiaodutongxue111/vue3_admin_node-js.git
                 </a>
             </p>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -42,6 +42,11 @@ v<template>
 </script>
 
 <style scoped lang="scss">
+.home {
+    background: url('../../assets/1.jpg') repeat;
+    height: 100%;
+}
+
 .project_introduce {
     text-indent: 2em;
     line-height: 30px;
