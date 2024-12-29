@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2 class="title">
-            游客留言板
+            留言板
         </h2>
         <div class="message_box">
             <div class="ipt">
@@ -16,11 +16,11 @@
         <el-card>
             <div class="content_box">
                 <div class="message_text">
-                    <div class="writer_name">作者大大</div>
+                    <div class="writer_name">作者</div>
                     <div class="text">
-                        由于个人后端技术的水平有限并且本次的项目仅为练习所以此项目没有连接数据库，为了解决之前遗留下来的品牌管理页面图片刷新丢失问题（具体请看ReadME文档中的品牌管理），
-                        导致后端服务器重启一次，之前的数据全部丢失，但这并不影响之后的朋友们继续进行测试， 如果有什么要补充的内容或者问题以及bug可以联系我，有时间都会补充或者解释，
-                        代码可以自行下载去更改或者增加内容（源码地址请看首页链接）。
+                        如果有什么要补充的内容或者问题以及bug可以联系我，有时间都会补充或者解释。
+
+                        测试测试测试 持续集成 自动部署
                     </div>
                 </div>
                 <div class="message_text" v-for="(item, index) in  messageData" :key="index">

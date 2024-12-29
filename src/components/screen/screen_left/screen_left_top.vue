@@ -4,7 +4,7 @@
         <p>
             <img src="@/assets/screen_content_left_top_icon1_.png" alt="">
         </p>
-        <p style="text-align: right;">可预约总量99999人</p>
+        <p style="text-align: right;">可预约总量1231212人</p>
         <ul class="list">
             <li>
                 <span>2</span>
