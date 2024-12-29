@@ -19,8 +19,6 @@
                     <div class="writer_name">作者</div>
                     <div class="text">
                         如果有什么要补充的内容或者问题以及bug可以联系我，有时间都会补充或者解释。
-
-                        测试测试测试 持续集成 自动部署
                     </div>
                 </div>
                 <div class="message_text" v-for="(item, index) in  messageData" :key="index">
